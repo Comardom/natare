@@ -1,0 +1,14 @@
+---
+interface Props {
+    type: 'ai' | 'outdated'
+    title: string
+    message: string
+}
+
+const { type, title, message } = Astro.props
+---
+
+<aside class:list={['notice-banner', `notice-banner--${type}`]} aria-label={title}>
+    <strong>{title}</strong>
+    <span>{message}</span>
+</aside>

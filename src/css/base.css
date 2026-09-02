@@ -4,6 +4,7 @@
 html, body {
     background: var(--theme-bg);
     color: var(--theme-color);
+    font-size: 1.0625rem;
     transition: background 0.3s ease, color 0.3s ease;
 }
 

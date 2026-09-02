@@ -1,0 +1,60 @@
+---
+import { getEntry, render } from 'astro:content'
+import NoticeBanner from '@/components/blog/NoticeBanner.astro'
+import ScrollablePageLayout from '@/layouts/ScrollablePageLayout.astro'
+import '/src/css/blog.css'
+
+const slug = Astro.params.slug
+if (!slug) return Astro.redirect('/blog', 302)
+
+const post = await getEntry('blog', slug)
+if (!post || post.data.draft) return Astro.redirect('/blog', 302)
+
+const { Content } = await render(post)
+const description = post.data.description ?? post.data.title
+const referenceDate = post.data.updatedDate ?? post.data.pubDate
+const oneYearAgo = new Date()
+oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1)
+const mayBeOutdated = referenceDate < oneYearAgo
+---
+
+<ScrollablePageLayout
+    title={`${post.data.title} | 一片星瓦`}
+    description={description}
+>
+    <main class="blog-page article-page">
+        <article class="article">
+            <header class="article-header">
+                <a class="back-link" href="/blog">← 返回博客</a>
+                <h1>{post.data.title}</h1>
+                <div class="article-meta">
+                    <span>作者：{post.data.author}</span>
+                    {post.data.aiGenerated && <span class="ai-tag">AI 生成</span>}
+                    <time datetime={post.data.pubDate.toISOString()}>
+                        发布于 {post.data.pubDate.toLocaleDateString('zh-CN')}
+                    </time>
+                </div>
+            </header>
+
+            {post.data.aiGenerated && (
+                <NoticeBanner
+                    type="ai"
+                    title="AI 生成内容"
+                    message="本文由 AI 生成或参与生成，请读者自行核验文中信息。"
+                />
+            )}
+
+            {mayBeOutdated && (
+                <NoticeBanner
+                    type="outdated"
+                    title="内容可能已过时"
+                    message="本文发布或更新已超过一年，相关信息可能已经发生变化，请结合当前资料进行核验。"
+                />
+            )}
+
+            <div class="prose">
+                <Content />
+            </div>
+        </article>
+    </main>
+</ScrollablePageLayout>

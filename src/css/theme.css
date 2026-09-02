@@ -16,6 +16,7 @@
     --theme-bg-button-hover: #ddd;
     --theme-border-button: #ccc;
     --theme-color-button: #222;
+    --theme-post-title: #205c43;
 }
 
 /* 暗色模式 */
@@ -35,4 +36,5 @@
     --theme-bg-button-hover: #3c3c3c;
     --theme-border-button: #666;
     --theme-color-button: #e0e0e0;
+    --theme-post-title: #8fc9aa;
 }
