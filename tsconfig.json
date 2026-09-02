@@ -1,0 +1,12 @@
+{
+  "extends": "astro/tsconfigs/strict",
+  //让 TypeScript 也认识 @/ 这个别名
+  "compilerOptions": {
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": [".astro/types.d.ts", "**/*"],
+  //构建输出目录不需要类型检查
+  "exclude": ["dist"]
+}

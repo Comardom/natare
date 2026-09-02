@@ -1,0 +1,85 @@
+---
+import { blog } from "@/data/blog.ts";
+const themeCookie = Astro.cookies.get('theme');
+const isDark = themeCookie?.value === 'dark';
+const title = Astro.props.title ?? blog.title;
+const description = Astro.props.description ?? blog.description;
+const pageClass = Astro.props.pageClass ?? '';
+
+import '/src/css/reset.css'
+import '/src/css/theme.css'
+import '/src/css/base.css'
+import '/src/css/fonts.css'
+---
+
+<html lang="zh-CN" class:list={[isDark && 'dark', pageClass]}>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={Astro.url} />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+
+    <!-- OG -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" /><!--如果是文章用 article，视频用 video-->
+    <meta property="og:site_name" content={blog.name} />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:url" content={Astro.url} />
+    <meta property="og:image" content={blog.url + blog.logo.og} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- JSON-LD -->
+    <script is:inline type="application/ld+json" set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": blog.name,
+        "url": blog.url,
+        "logo": blog.url + blog.logo.og,
+    })} />
+
+    <slot name="head" />
+    <style>
+        /* ── 布局专属样式 ────────────── */
+        html, body {
+            block-size: 100dvb;
+            inline-size: 100dvi;
+            overflow: hidden;
+            /* 允许双指缩放，同时保留垂直平移（翻页手势） */
+            touch-action: pan-y pinch-zoom;
+            scrollbar-width: none;
+        }
+        body::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* 全屏翻页：所有 section 堆叠在视口内 */
+        .snap-section {
+            position: absolute;
+            inset: 0;
+        }
+
+        .snap-section:not(:first-child) {
+            visibility: hidden;
+        }
+    </style>
+</head>
+<body>
+<slot />
+<script>
+    import { disposePageAnimator, initPageAnimator } from '@/utils/pageAnimator'
+
+    const dispose = () => {
+        disposePageAnimator()
+        document.removeEventListener('astro:before-swap', dispose)
+        window.removeEventListener('pagehide', dispose)
+    }
+
+    document.addEventListener('astro:before-swap', dispose)
+    window.addEventListener('pagehide', dispose, { once: true })
+    initPageAnimator()
+</script>
+</body>
+</html>

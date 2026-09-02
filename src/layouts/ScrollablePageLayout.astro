@@ -1,0 +1,47 @@
+---
+import { blog } from "@/data/blog.ts";
+const themeCookie = Astro.cookies.get('theme');
+const isDark = themeCookie?.value === 'dark';
+const title = Astro.props.title ?? blog.title;
+const description = Astro.props.description ?? blog.description;
+
+import '/src/css/reset.css'
+import '/src/css/theme.css'
+import '/src/css/base.css'
+import '/src/css/fonts.css'
+---
+
+<html lang="zh-CN" class={isDark ? 'dark' : ''}>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={Astro.url} />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+
+    <!-- OG -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={blog.name} />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:url" content={Astro.url} />
+    <meta property="og:image" content={blog.url + blog.logo.og} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- JSON-LD -->
+    <script is:inline type="application/ld+json" set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": blog.name,
+        "url": blog.url,
+        "logo": blog.url + blog.logo.og,
+    })} />
+
+    <slot name="head" />
+</head>
+<body>
+<slot />
+</body>
+</html>
