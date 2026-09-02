@@ -50,19 +50,42 @@ function isPostOutdated(post: (typeof posts)[number]) {
         const scroller = document.querySelector<HTMLElement>('.blog-scroller')
 
         if (scroller) {
+            let targetScrollLeft = scroller.scrollLeft
+            let animationFrame = 0
+
+            const animateScroll = () => {
+                const remaining = targetScrollLeft - scroller.scrollLeft
+
+                if (Math.abs(remaining) < 0.5) {
+                    scroller.scrollLeft = targetScrollLeft
+                    animationFrame = 0
+                    return
+                }
+
+                scroller.scrollLeft += remaining * 0.2
+                animationFrame = requestAnimationFrame(animateScroll)
+            }
+
             const handleWheel = (event: WheelEvent) => {
                 if (!(event.target instanceof Element) || !event.target.closest('.blog-page')) return
                 if (window.matchMedia('(max-width: 40rem)').matches) return
                 if (scroller.scrollWidth <= scroller.clientWidth) return
 
-                const distance = event.deltaX || event.deltaY
+                const multiplier = event.deltaMode === WheelEvent.DOM_DELTA_LINE ? 16
+                    : event.deltaMode === WheelEvent.DOM_DELTA_PAGE ? scroller.clientWidth
+                    : 1
+                const distance = (event.deltaX || event.deltaY) * multiplier
                 if (!distance) return
 
                 event.preventDefault()
-                scroller.scrollBy({ left: distance, top: 0, behavior: 'auto' })
+                const maxScrollLeft = scroller.scrollWidth - scroller.clientWidth
+                targetScrollLeft = Math.min(Math.max(targetScrollLeft + distance, 0), maxScrollLeft)
+
+                if (!animationFrame) animationFrame = requestAnimationFrame(animateScroll)
             }
 
             const dispose = () => {
+                cancelAnimationFrame(animationFrame)
                 document.removeEventListener('wheel', handleWheel, { capture: true })
                 document.removeEventListener('astro:before-swap', dispose)
                 window.removeEventListener('pagehide', dispose)
