@@ -2,10 +2,10 @@ import { defineCollection } from 'astro:content'
 import { glob } from 'astro/loaders'
 import { z } from 'astro/zod'
 
-const blog = defineCollection({
+const usus = defineCollection({
     loader: glob({
         pattern: '**/*.md',
-        base: './src/content/blog',
+        base: './src/content/usus',
     }),
     schema: z.object({
         title: z.string(),
@@ -18,10 +18,10 @@ const blog = defineCollection({
     }),
 })
 
-const ars = defineCollection({
+const litterae = defineCollection({
     loader: glob({
         pattern: '**/*.md',
-        base: './src/content/ars',
+        base: './src/content/litterae',
     }),
     schema: z.object({
         title: z.string(),
@@ -32,4 +32,4 @@ const ars = defineCollection({
     }),
 })
 
-export const collections = { blog, ars }
+export const collections = { usus, litterae }

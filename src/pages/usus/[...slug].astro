@@ -5,10 +5,10 @@ import ScrollablePageLayout from '@/layouts/ScrollablePageLayout.astro'
 import '/src/css/blog.css'
 
 const slug = Astro.params.slug
-if (!slug) return Astro.redirect('/blog', 302)
+if (!slug) return Astro.redirect('/usus', 302)
 
-const post = await getEntry('blog', slug)
-if (!post || post.data.draft) return Astro.redirect('/blog', 302)
+const post = await getEntry('usus', slug)
+if (!post || post.data.draft) return Astro.redirect('/usus', 302)
 
 const { Content } = await render(post)
 const description = post.data.description ?? post.data.title
@@ -25,7 +25,7 @@ const mayBeOutdated = referenceDate < oneYearAgo
     <main class="blog-page article-page">
         <article class="article">
             <header class="article-header">
-                <a class="back-link" href="/blog">← 返回博客</a>
+                <a class="back-link" href="/usus">← 返回技术博客</a>
                 <h1>{post.data.title}</h1>
                 <div class="article-meta">
                     <span>作者：{post.data.author}</span>

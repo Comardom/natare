@@ -4,10 +4,10 @@ import ScrollablePageLayout from '@/layouts/ScrollablePageLayout.astro'
 import '/src/css/blog.css'
 
 const slug = Astro.params.slug
-if (!slug) return Astro.redirect('/blog', 302)
+if (!slug) return Astro.redirect('/litterae', 302)
 
-const post = await getEntry('ars', slug)
-if (!post || post.data.draft) return Astro.redirect('/blog', 302)
+const post = await getEntry('litterae', slug)
+if (!post || post.data.draft) return Astro.redirect('/litterae', 302)
 
 const { Content } = await render(post)
 const description = post.data.description ?? post.data.title
@@ -20,7 +20,7 @@ const description = post.data.description ?? post.data.title
     <main class="blog-page article-page">
         <article class="article">
             <header class="article-header">
-                <a class="back-link" href="/ars">← 返回文集</a>
+                <a class="back-link" href="/litterae">← 返回文集</a>
                 <h1>{post.data.title}</h1>
                 <div class="article-meta">
                     <span>作者：{post.data.author}</span>

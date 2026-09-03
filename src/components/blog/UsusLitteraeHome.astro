@@ -1,0 +1,180 @@
+---
+import { getCollection } from 'astro:content'
+import ThemeToggle from '@/components/blog/ThemeToggle.astro'
+import ScrollablePageLayout from '@/layouts/ScrollablePageLayout.astro'
+import '/src/css/blog.css'
+
+interface Props {
+    initialView: 'usus' | 'litterae'
+}
+
+const { initialView } = Astro.props
+const isLitteraeOpen = initialView === 'litterae'
+const ususPosts = (await getCollection('usus', ({ data }) => !data.draft))
+    .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+const litteraePosts = (await getCollection('litterae', ({ data }) => !data.draft))
+    .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+
+function isPostOutdated(post: (typeof ususPosts)[number]) {
+    const referenceDate = post.data.updatedDate ?? post.data.pubDate
+    const oneYearAgo = new Date()
+    oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1)
+    return referenceDate < oneYearAgo
+}
+---
+
+<ScrollablePageLayout title="Comardom的博客 | 一片星瓦">
+    <main class:list={['blog-page', { 'is-litterae-open': isLitteraeOpen }]}>
+        <div class="view-stage">
+            <section class="view-scene usus-view" aria-hidden={isLitteraeOpen}>
+                <div class="blog-scroller">
+                    <aside class="blog-intro">
+                        <h1>一片星瓦</h1>
+                        <p>当我进入纯粹的黑暗时，天就是永远晴朗的。因为没有那些嘈杂的光色污染，即使是灰蒙蒙的天，也变得严谨可爱了起来。</p>
+                        <button class="litterae-toggle" type="button" aria-label="切换文集" aria-expanded="false">
+                            <img src="/go-black.svg" class="icon icon-go-black" alt="" />
+                            <img src="/go-white.svg" class="icon icon-go-white" alt="" />
+                        </button>
+                    </aside>
+                    <section class="post-area" aria-label="文章列表">
+                        <div class="post-list">
+                            {ususPosts.length ? ususPosts.map((post) => (
+                                <article class="post-card">
+                                    <time datetime={post.data.pubDate.toISOString()}>{post.data.pubDate.toLocaleDateString('zh-CN')}</time>
+                                    <span class="post-author">作者：{post.data.author}</span>
+                                    {post.data.aiGenerated && <span class="ai-tag">AI 生成</span>}
+                                    {isPostOutdated(post) && <span class="outdated-tag">可能过时</span>}
+                                    <h2><a href={`/usus/${post.id}`}>{post.data.title}</a></h2>
+                                    {post.data.description && <p>{post.data.description}</p>}
+                                </article>
+                            )) : <p class="empty-state">暂时还没有文章。</p>}
+                        </div>
+                    </section>
+                </div>
+            </section>
+            <section class="view-scene litterae-view" aria-hidden={!isLitteraeOpen}>
+                <div class="blog-scroller">
+                    <section class="litterae-area" aria-label="文集列表">
+                        <div class="litterae-list">
+                            {litteraePosts.map((post) => (
+                                <article class="post-card litterae-card">
+                                    <time datetime={post.data.pubDate.toISOString()}>{post.data.pubDate.toLocaleDateString('zh-CN')}</time>
+                                    <span class="post-author">作者：{post.data.author}</span>
+                                    <h2><a href={`/litterae/${post.id}`}>{post.data.title}</a></h2>
+                                    {post.data.description && <p>{post.data.description}</p>}
+                                </article>
+                            ))}
+                        </div>
+                    </section>
+                    <aside class="blog-intro blog-intro--litterae">
+                        <h1>一片星瓦</h1>
+                        <p>当我进入纯粹的黑暗时，天就是永远晴朗的。因为没有那些嘈杂的光色污染，即使是灰蒙蒙的天，也变得严谨可爱了起来。</p>
+                        <button class="litterae-toggle" type="button" aria-label="切换技术博客" aria-expanded="true">
+                            <img src="/go-black.svg" class="icon icon-go-black" alt="" />
+                            <img src="/go-white.svg" class="icon icon-go-white" alt="" />
+                        </button>
+                    </aside>
+                </div>
+            </section>
+        </div>
+    </main>
+    <ThemeToggle />
+    <script>
+        import { gsap } from 'gsap'
+
+        const page = document.querySelector<HTMLElement>('.blog-page')
+        const ususView = document.querySelector<HTMLElement>('.usus-view')
+        const litteraeView = document.querySelector<HTMLElement>('.litterae-view')
+        const toggles = document.querySelectorAll<HTMLButtonElement>('.litterae-toggle')
+
+        if (page && ususView && litteraeView && toggles.length) {
+            let targetScrollLeft = 0
+            let animationFrame = 0
+            let viewAnimation: gsap.core.Timeline | null = null
+
+            const activeScroller = () => (page.classList.contains('is-litterae-open') ? litteraeView : ususView)
+                .querySelector<HTMLElement>('.blog-scroller')
+
+            const animateScroll = () => {
+                const scroller = activeScroller()
+                if (!scroller) return
+                const remaining = targetScrollLeft - scroller.scrollLeft
+                if (Math.abs(remaining) < 0.5) {
+                    scroller.scrollLeft = targetScrollLeft
+                    animationFrame = 0
+                    return
+                }
+                scroller.scrollLeft += remaining * 0.2
+                animationFrame = requestAnimationFrame(animateScroll)
+            }
+
+            const setLitteraeOpen = (isOpen: boolean, updateUrl: boolean) => {
+                if (viewAnimation?.isActive()) return
+                const current = isOpen ? ususView : litteraeView
+                const next = isOpen ? litteraeView : ususView
+                const direction = isOpen ? 1 : -1
+                const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce), (max-width: 40rem)').matches
+
+                if (updateUrl) {
+                    history.pushState({ view: isOpen ? 'litterae' : 'usus' }, '', isOpen ? '/litterae' : '/usus')
+                }
+
+                current.setAttribute('aria-hidden', 'true')
+                next.setAttribute('aria-hidden', 'false')
+                toggles.forEach((toggle) => toggle.setAttribute('aria-expanded', String(isOpen)))
+                page.classList.toggle('is-litterae-open', isOpen)
+
+                if (reducedMotion) {
+                    gsap.set([current, next], { clearProps: 'transform,opacity,visibility' })
+                    return
+                }
+
+                gsap.set(current, { autoAlpha: 1, x: 0, pointerEvents: 'none' })
+                gsap.set(next, { autoAlpha: 1, x: -direction * window.innerWidth, pointerEvents: 'none' })
+
+                viewAnimation = gsap.timeline({
+                    defaults: { duration: 0.75, ease: 'power4.inOut' },
+                    onComplete: () => {
+                        gsap.set([current, next], { clearProps: 'transform,opacity,visibility,pointerEvents' })
+                        viewAnimation = null
+                    },
+                })
+                viewAnimation.to(current, { x: direction * window.innerWidth, autoAlpha: 0 }, 0)
+                viewAnimation.to(next, { x: 0, autoAlpha: 1 }, 0.06)
+            }
+
+            const handleWheel = (event: WheelEvent) => {
+                if (!(event.target instanceof Element) || !event.target.closest('.blog-page')) return
+                if (window.matchMedia('(max-width: 40rem)').matches) return
+                const scroller = activeScroller()
+                if (!scroller || scroller.scrollWidth <= scroller.clientWidth) return
+                const multiplier = event.deltaMode === WheelEvent.DOM_DELTA_LINE ? 16
+                    : event.deltaMode === WheelEvent.DOM_DELTA_PAGE ? scroller.clientWidth : 1
+                const distance = (event.deltaX || event.deltaY) * multiplier
+                if (!distance) return
+                event.preventDefault()
+                const maxScrollLeft = scroller.scrollWidth - scroller.clientWidth
+                targetScrollLeft = Math.min(Math.max(targetScrollLeft + distance, 0), maxScrollLeft)
+                if (!animationFrame) animationFrame = requestAnimationFrame(animateScroll)
+            }
+
+            const toggleLitterae = () => setLitteraeOpen(!page.classList.contains('is-litterae-open'), true)
+            const handlePopState = () => setLitteraeOpen(window.location.pathname === '/litterae', false)
+            const dispose = () => {
+                cancelAnimationFrame(animationFrame)
+                viewAnimation?.kill()
+                document.removeEventListener('wheel', handleWheel, { capture: true })
+                toggles.forEach((toggle) => toggle.removeEventListener('click', toggleLitterae))
+                window.removeEventListener('popstate', handlePopState)
+                document.removeEventListener('astro:before-swap', dispose)
+                window.removeEventListener('pagehide', dispose)
+            }
+
+            document.addEventListener('wheel', handleWheel, { capture: true, passive: false })
+            toggles.forEach((toggle) => toggle.addEventListener('click', toggleLitterae))
+            window.addEventListener('popstate', handlePopState)
+            document.addEventListener('astro:before-swap', dispose)
+            window.addEventListener('pagehide', dispose, { once: true })
+        }
+    </script>
+</ScrollablePageLayout>
