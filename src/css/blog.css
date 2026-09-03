@@ -259,6 +259,7 @@
 
 .theme-toggle,
 .litterae-toggle {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
