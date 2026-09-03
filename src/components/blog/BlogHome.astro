@@ -1,0 +1,134 @@
+---
+import { getCollection } from 'astro:content'
+import ThemeToggle from '@/components/blog/ThemeToggle.astro'
+import ScrollablePageLayout from '@/layouts/ScrollablePageLayout.astro'
+import '/src/css/blog.css'
+
+interface Props {
+    initialView: 'blog' | 'ars'
+}
+
+const { initialView } = Astro.props
+const isArsOpen = initialView === 'ars'
+const posts = (await getCollection('blog', ({ data }) => !data.draft))
+    .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+const arsPosts = (await getCollection('ars', ({ data }) => !data.draft))
+    .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+
+function isPostOutdated(post: (typeof posts)[number]) {
+    const referenceDate = post.data.updatedDate ?? post.data.pubDate
+    const oneYearAgo = new Date()
+    oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1)
+    return referenceDate < oneYearAgo
+}
+---
+
+<ScrollablePageLayout title="Comardom的博客 | 一片星瓦">
+    <main class:list={['blog-page', { 'is-ars-open': isArsOpen }]}>
+        <div class="blog-scroller">
+            <section class="ars-area" aria-label="文集列表" aria-hidden={!isArsOpen}>
+                <div class="ars-list">
+                    {arsPosts.map((post) => (
+                        <article class="post-card ars-card">
+                            <time datetime={post.data.pubDate.toISOString()}>
+                                {post.data.pubDate.toLocaleDateString('zh-CN')}
+                            </time>
+                            <span class="post-author">作者：{post.data.author}</span>
+                            <h2><a href={`/ars/${post.id}`}>{post.data.title}</a></h2>
+                            {post.data.description && <p>{post.data.description}</p>}
+                        </article>
+                    ))}
+                </div>
+            </section>
+            <aside class="blog-intro">
+                <h1>一片星瓦</h1>
+                <p>当我进入纯粹的黑暗时，天就是永远晴朗的。因为没有那些嘈杂的光色污染，即使是灰蒙蒙的天，也变得严谨可爱了起来。</p>
+                <button class="ars-toggle" type="button" aria-label="切换文集" aria-expanded={isArsOpen}>
+                    <img src="/go-black.svg" class="icon icon-go-black" alt="" />
+                    <img src="/go-white.svg" class="icon icon-go-white" alt="" />
+                </button>
+            </aside>
+
+            <section class="post-area" aria-label="文章列表">
+                <div class="post-list">
+                    {posts.length ? posts.map((post) => (
+                        <article class="post-card">
+                            <time datetime={post.data.pubDate.toISOString()}>{post.data.pubDate.toLocaleDateString('zh-CN')}</time>
+                            <span class="post-author">作者：{post.data.author}</span>
+                            {post.data.aiGenerated && <span class="ai-tag">AI 生成</span>}
+                            {isPostOutdated(post) && <span class="outdated-tag">可能过时</span>}
+                            <h2><a href={`/blog/${post.id}`}>{post.data.title}</a></h2>
+                            {post.data.description && <p>{post.data.description}</p>}
+                        </article>
+                    )) : <p class="empty-state">暂时还没有文章。</p>}
+                </div>
+            </section>
+        </div>
+    </main>
+    <ThemeToggle />
+    <script>
+        const scroller = document.querySelector<HTMLElement>('.blog-scroller')
+        const page = document.querySelector<HTMLElement>('.blog-page')
+        const arsArea = document.querySelector<HTMLElement>('.ars-area')
+        const arsList = document.querySelector<HTMLElement>('.ars-list')
+        const arsToggle = document.querySelector<HTMLButtonElement>('.ars-toggle')
+
+        if (scroller && page && arsArea && arsList && arsToggle) {
+            let targetScrollLeft = scroller.scrollLeft
+            let animationFrame = 0
+
+            const animateScroll = () => {
+                const remaining = targetScrollLeft - scroller.scrollLeft
+                if (Math.abs(remaining) < 0.5) {
+                    scroller.scrollLeft = targetScrollLeft
+                    animationFrame = 0
+                    return
+                }
+                scroller.scrollLeft += remaining * 0.2
+                animationFrame = requestAnimationFrame(animateScroll)
+            }
+
+            const setArsOpen = (isOpen: boolean, updateUrl: boolean) => {
+                page.classList.toggle('is-ars-open', isOpen)
+                arsToggle.setAttribute('aria-expanded', String(isOpen))
+                arsArea.setAttribute('aria-hidden', String(!isOpen))
+                arsArea.style.inlineSize = isOpen ? `${arsList.scrollWidth}px` : '0'
+
+                if (updateUrl) {
+                    history.pushState({ view: isOpen ? 'ars' : 'blog' }, '', isOpen ? '/ars' : '/blog')
+                }
+            }
+
+            const handleWheel = (event: WheelEvent) => {
+                if (!(event.target instanceof Element) || !event.target.closest('.blog-page')) return
+                if (window.matchMedia('(max-width: 40rem)').matches) return
+                if (scroller.scrollWidth <= scroller.clientWidth) return
+                const multiplier = event.deltaMode === WheelEvent.DOM_DELTA_LINE ? 16
+                    : event.deltaMode === WheelEvent.DOM_DELTA_PAGE ? scroller.clientWidth : 1
+                const distance = (event.deltaX || event.deltaY) * multiplier
+                if (!distance) return
+                event.preventDefault()
+                const maxScrollLeft = scroller.scrollWidth - scroller.clientWidth
+                targetScrollLeft = Math.min(Math.max(targetScrollLeft + distance, 0), maxScrollLeft)
+                if (!animationFrame) animationFrame = requestAnimationFrame(animateScroll)
+            }
+
+            const toggleArs = () => setArsOpen(!page.classList.contains('is-ars-open'), true)
+            const handlePopState = () => setArsOpen(window.location.pathname === '/ars', false)
+            const dispose = () => {
+                cancelAnimationFrame(animationFrame)
+                document.removeEventListener('wheel', handleWheel, { capture: true })
+                arsToggle.removeEventListener('click', toggleArs)
+                window.removeEventListener('popstate', handlePopState)
+                document.removeEventListener('astro:before-swap', dispose)
+                window.removeEventListener('pagehide', dispose)
+            }
+
+            document.addEventListener('wheel', handleWheel, { capture: true, passive: false })
+            arsToggle.addEventListener('click', toggleArs)
+            window.addEventListener('popstate', handlePopState)
+            document.addEventListener('astro:before-swap', dispose)
+            window.addEventListener('pagehide', dispose, { once: true })
+        }
+    </script>
+</ScrollablePageLayout>

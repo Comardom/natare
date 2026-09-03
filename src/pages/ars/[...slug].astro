@@ -1,0 +1,38 @@
+---
+import { getEntry, render } from 'astro:content'
+import ScrollablePageLayout from '@/layouts/ScrollablePageLayout.astro'
+import '/src/css/blog.css'
+
+const slug = Astro.params.slug
+if (!slug) return Astro.redirect('/blog', 302)
+
+const post = await getEntry('ars', slug)
+if (!post || post.data.draft) return Astro.redirect('/blog', 302)
+
+const { Content } = await render(post)
+const description = post.data.description ?? post.data.title
+---
+
+<ScrollablePageLayout
+    title={`${post.data.title} | 一片星瓦`}
+    description={description}
+>
+    <main class="blog-page article-page">
+        <article class="article">
+            <header class="article-header">
+                <a class="back-link" href="/ars">← 返回文集</a>
+                <h1>{post.data.title}</h1>
+                <div class="article-meta">
+                    <span>作者：{post.data.author}</span>
+                    <time datetime={post.data.pubDate.toISOString()}>
+                        发布于 {post.data.pubDate.toLocaleDateString('zh-CN')}
+                    </time>
+                </div>
+            </header>
+
+            <div class="prose">
+                <Content />
+            </div>
+        </article>
+    </main>
+</ScrollablePageLayout>
