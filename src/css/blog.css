@@ -25,16 +25,14 @@
 
 .content-page.is-litterae-open .litterae-scene {
     display: grid;
-    grid-template-columns: minmax(0, 37.5svi) 40svi;
-    justify-content: space-between;
+    grid-template-columns: 60% 40%;
     align-items: start;
     min-block-size: 100dvb;
 }
 
 .scene-snapshot.litterae-snapshot {
     display: grid;
-    grid-template-columns: minmax(0, 37.5svi) 40svi;
-    justify-content: space-between;
+    grid-template-columns: 60dvi 40svi;
     align-items: start;
 }
 
@@ -67,14 +65,14 @@
     position: sticky;
     inset-block-start: 0;
     align-self: start;
-    block-size: 100dvb;
+    block-size: 100svb;
     text-align: end;
     text-align: end;
     align-items: end;
 }
 
 .litterae-flow {
-    flex: 0 0 auto;
+    inline-size: 60dvi;
 }
 
 .litterae-list {
@@ -94,7 +92,8 @@
     grid-template-columns: 1fr;
     grid-template-rows: none;
     gap: 1.5svi;
-    inline-size: 37.5svi;
+    inline-size: 45dvi;
+    justify-self: center;
 }
 
 .usus-intro h1,
