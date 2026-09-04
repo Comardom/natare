@@ -96,6 +96,23 @@ function isPostOutdated(post: (typeof ususPosts)[number]) {
                 const snapshot = scene.cloneNode(true) as HTMLElement
 
                 snapshot.setAttribute('aria-hidden', 'true')
+                snapshot.classList.remove('usus-scene', 'litterae-scene')
+                snapshot.classList.add('scene-snapshot')
+                if (scene === litteraeScene) {
+                    const sidebar = scene.querySelector<HTMLElement>('.litterae-sidebar')
+                    const snapshotSidebar = snapshot.querySelector<HTMLElement>('.litterae-sidebar')
+
+                    snapshot.classList.add('litterae-snapshot')
+                    if (sidebar && snapshotSidebar) {
+                        const sidebarRect = sidebar.getBoundingClientRect()
+                        Object.assign(snapshotSidebar.style, {
+                            position: 'absolute',
+                            inset: `${sidebarRect.top - rect.top}px auto auto ${sidebarRect.left - rect.left}px`,
+                            inlineSize: `${sidebarRect.width}px`,
+                            blockSize: `${sidebarRect.height}px`,
+                        })
+                    }
+                }
                 Object.assign(snapshot.style, {
                     position: 'fixed',
                     inset: `${rect.top}px auto auto ${rect.left}px`,

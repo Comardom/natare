@@ -1,6 +1,6 @@
 .content-page {
     block-size: 100dvb;
-    inline-size: 100dvi;
+    inline-size: 100%;
     overflow: hidden;
 }
 
@@ -31,6 +31,17 @@
     min-block-size: 100dvb;
 }
 
+.scene-snapshot.litterae-snapshot {
+    display: grid;
+    grid-template-columns: minmax(0, 37.5svi) 40svi;
+    justify-content: space-between;
+    align-items: start;
+}
+
+.scene-snapshot .litterae-sidebar {
+    position: static;
+}
+
 .usus-scroller {
     display: flex;
     --section-gap: clamp(2rem, 6dvi, 6rem);
@@ -54,8 +65,9 @@
 
 .litterae-sidebar {
     position: sticky;
-    inset-block-start: 1.5rem;
+    inset-block-start: 0;
     align-self: start;
+    block-size: 100dvb;
     text-align: end;
     text-align: end;
     align-items: end;
