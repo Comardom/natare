@@ -379,7 +379,111 @@
 }
 
 .article-page {
-    max-width: 48rem;
+    display: grid;
+    grid-template-columns: 70% 30%;
+    min-block-size: 100svb;
+}
+
+.article-reading-column {
+    inline-size: 82.142857%;
+    justify-self: center;
+    padding-block: 3rem;
+}
+
+.article-aside {
+    display: grid;
+    align-items: start;
+    justify-items: center;
+    min-block-size: 100svb;
+}
+
+.article-glass {
+    position: sticky;
+    inset-block-start: 10lvb;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    inline-size: 20dvi;
+    block-size: 80lvb;
+    box-sizing: border-box;
+    padding: 1.5rem;
+    background-color: rgba(255, 255, 255, 0.38);
+    background-image: linear-gradient(rgba(255, 255, 255, 0.24), transparent);
+    -webkit-backdrop-filter: blur(0.625rem);
+    backdrop-filter: blur(0.625rem);
+    border: 0.0625rem solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 1.5625rem 1.5625rem rgba(0, 0, 0, 0.18);
+}
+
+.dark .article-glass {
+    background-color: rgba(30, 30, 30, 0.5);
+    background-image: linear-gradient(rgba(255, 255, 255, 0.15), transparent);
+    border-color: rgba(255, 255, 255, 0.16);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.article-glass-meta {
+    display: grid;
+    gap: 1.25rem;
+    margin: 0;
+}
+
+.article-glass-meta div {
+    display: grid;
+    gap: 0.35rem;
+}
+
+.article-glass-meta dt {
+    opacity: 0.6;
+}
+
+.article-glass-meta dd {
+    margin: 0;
+}
+
+.article-glass .theme-toggle {
+    position: static;
+    inset: auto;
+}
+
+.article-glass-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.article-back-toggle {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 2.5rem;
+    block-size: 2.5rem;
+    border: 0.15rem solid var(--theme-color);
+    border-radius: 50%;
+    color: inherit;
+    text-decoration: none;
+}
+
+.article-back-toggle .icon {
+    position: absolute;
+    inline-size: 1.4rem;
+    block-size: 1.4rem;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+}
+
+.article-back-toggle .icon-exit-black,
+.dark .article-back-toggle .icon-exit-white {
+    opacity: 1;
+}
+
+.dark .article-back-toggle .icon-exit-black {
+    opacity: 0;
+}
+
+.article-back-toggle:hover {
+    background: var(--theme-bg-button-hover);
 }
 
 .article-header {
@@ -394,6 +498,10 @@
 .prose {
     font-size: 1.125rem;
     line-height: 1.95;
+}
+
+.litterae-article-page .prose p {
+    white-space: pre-line;
 }
 
 .prose h2,
@@ -453,6 +561,31 @@
         min-block-size: 100dvb;
         overflow: visible;
         padding: 0;
+    }
+
+    .article-page {
+        display: block;
+        min-block-size: 0;
+        padding: 1.5rem 0.75rem 3rem;
+    }
+
+    .article-reading-column {
+        inline-size: auto;
+        padding-block: 0;
+    }
+
+    .article-aside {
+        display: block;
+        min-block-size: 0;
+        margin-block-start: 2rem;
+    }
+
+    .article-glass {
+        position: static;
+        inline-size: 100%;
+        block-size: auto;
+        min-block-size: 0;
+        gap: 2rem;
     }
 
     .usus-scroller {

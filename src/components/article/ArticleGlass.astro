@@ -1,0 +1,49 @@
+---
+import ThemeToggle from '@/components/blog/ThemeToggle.astro'
+
+interface Props {
+    author: string
+    pubDate: Date
+    aiGenerated?: boolean
+    mayBeOutdated?: boolean
+    backHref: string
+}
+
+const { author, pubDate, aiGenerated = false, mayBeOutdated = false, backHref } = Astro.props
+---
+
+<aside class="article-aside" aria-label="文章信息">
+    <div class="article-glass">
+        <dl class="article-glass-meta">
+            <div>
+                <dt>作者</dt>
+                <dd>{author}</dd>
+            </div>
+            <div>
+                <dt>发布日期</dt>
+                <dd>
+                    <time datetime={pubDate.toISOString()}>{pubDate.toLocaleDateString('zh-CN')}</time>
+                </dd>
+            </div>
+            {aiGenerated && (
+                <div>
+                    <dt>内容来源</dt>
+                    <dd><span class="ai-tag">AI 生成</span></dd>
+                </div>
+            )}
+            {mayBeOutdated && (
+                <div>
+                    <dt>内容状态</dt>
+                    <dd><span class="outdated-tag">可能过时</span></dd>
+                </div>
+            )}
+        </dl>
+        <div class="article-glass-actions">
+            <a class="article-back-toggle" href={backHref} aria-label="返回列表">
+                <img src="/exit-black.svg" class="icon icon-exit-black" alt="" />
+                <img src="/exit-white.svg" class="icon icon-exit-white" alt="" />
+            </a>
+            <ThemeToggle />
+        </div>
+    </div>
+</aside>

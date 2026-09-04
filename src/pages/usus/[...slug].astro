@@ -1,5 +1,6 @@
 ---
 import { getEntry, render } from 'astro:content'
+import ArticleGlass from '@/components/article/ArticleGlass.astro'
 import NoticeBanner from '@/components/blog/NoticeBanner.astro'
 import ScrollablePageLayout from '@/layouts/ScrollablePageLayout.astro'
 import '/src/css/blog.css'
@@ -22,18 +23,10 @@ const mayBeOutdated = referenceDate < oneYearAgo
     title={`${post.data.title} | 一片星瓦`}
     description={description}
 >
-    <main class="blog-page article-page">
-        <article class="article">
+    <main class="article-page">
+        <article class="article-reading-column">
             <header class="article-header">
-                <a class="back-link" href="/usus">← 返回技术博客</a>
                 <h1>{post.data.title}</h1>
-                <div class="article-meta">
-                    <span>作者：{post.data.author}</span>
-                    {post.data.aiGenerated && <span class="ai-tag">AI 生成</span>}
-                    <time datetime={post.data.pubDate.toISOString()}>
-                        发布于 {post.data.pubDate.toLocaleDateString('zh-CN')}
-                    </time>
-                </div>
             </header>
 
             {post.data.aiGenerated && (
@@ -56,5 +49,12 @@ const mayBeOutdated = referenceDate < oneYearAgo
                 <Content />
             </div>
         </article>
+        <ArticleGlass
+            author={post.data.author}
+            pubDate={post.data.pubDate}
+            aiGenerated={post.data.aiGenerated}
+            mayBeOutdated={mayBeOutdated}
+            backHref="/usus"
+        />
     </main>
 </ScrollablePageLayout>

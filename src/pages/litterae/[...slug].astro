@@ -1,5 +1,6 @@
 ---
 import { getEntry, render } from 'astro:content'
+import ArticleGlass from '@/components/article/ArticleGlass.astro'
 import ScrollablePageLayout from '@/layouts/ScrollablePageLayout.astro'
 import '/src/css/blog.css'
 
@@ -17,22 +18,16 @@ const description = post.data.description ?? post.data.title
     title={`${post.data.title} | 一片星瓦`}
     description={description}
 >
-    <main class="blog-page article-page">
-        <article class="article">
+    <main class="article-page litterae-article-page">
+        <article class="article-reading-column">
             <header class="article-header">
-                <a class="back-link" href="/litterae">← 返回文集</a>
                 <h1>{post.data.title}</h1>
-                <div class="article-meta">
-                    <span>作者：{post.data.author}</span>
-                    <time datetime={post.data.pubDate.toISOString()}>
-                        发布于 {post.data.pubDate.toLocaleDateString('zh-CN')}
-                    </time>
-                </div>
             </header>
 
             <div class="prose">
                 <Content />
             </div>
         </article>
+        <ArticleGlass author={post.data.author} pubDate={post.data.pubDate} backHref="/litterae" />
     </main>
 </ScrollablePageLayout>
