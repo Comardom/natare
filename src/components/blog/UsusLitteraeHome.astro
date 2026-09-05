@@ -54,7 +54,7 @@ function isPostOutdated(post: (typeof ususPosts)[number]) {
                 <section class="usus-flow" aria-label="技术博客列表">
                     <div class="usus-list">
                         {ususPosts.length ? ususPosts.map((post) => (
-                            <article class="post-card">
+                            <article class="post-card" id={post.id}>
                                 <time datetime={post.data.pubDate.toISOString()}>{post.data.pubDate.toLocaleDateString('zh-CN')}</time>
                                 <span class="post-author">作者：{post.data.author}</span>
                                 {post.data.aiGenerated && <span class="ai-tag">AI 生成</span>}
@@ -72,7 +72,7 @@ function isPostOutdated(post: (typeof ususPosts)[number]) {
             <section class="litterae-flow" aria-label="文集列表">
                 <div class="litterae-list">
                     {litteraeCards.map(({ post, excerpt }) => (
-                        <article class="post-card litterae-card">
+                        <article class="post-card litterae-card" id={post.id}>
                             <time datetime={post.data.pubDate.toISOString()}>{post.data.pubDate.toLocaleDateString('zh-CN')}</time>
                             <span class="post-author">作者：{post.data.author}</span>
                             {post.data.title !== '-' && <h2><a href={`/litterae/${post.id}`}>{post.data.title}</a></h2>}
@@ -91,6 +91,24 @@ function isPostOutdated(post: (typeof ususPosts)[number]) {
             </aside>
         </section>
     </main>
+    <script is:inline>
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual'
+
+        const catalog = document.querySelector('.content-page')
+        const isLitteraeCatalog = catalog?.classList.contains('is-litterae-open')
+        const savedPosition = sessionStorage.getItem(
+            `catalog-scroll:${isLitteraeCatalog ? 'litterae' : 'usus'}`,
+        )
+
+        if (savedPosition !== null) {
+            if (isLitteraeCatalog) {
+                window.scrollTo(0, Number(savedPosition))
+            } else {
+                const scroller = document.querySelector('.usus-scroller')
+                if (scroller) scroller.scrollLeft = Number(savedPosition)
+            }
+        }
+    </script>
     <ThemeToggle />
     <script>
         import { gsap } from 'gsap'
@@ -106,6 +124,21 @@ function isPostOutdated(post: (typeof ususPosts)[number]) {
             let transition: gsap.core.Timeline | null = null
 
             const activeUsusScroller = () => ususScene.querySelector<HTMLElement>('.usus-scroller')
+
+            const storageKey = (view: 'usus' | 'litterae') => `catalog-scroll:${view}`
+
+            const saveScrollPosition = (event: MouseEvent) => {
+                const link = event.target instanceof Element
+                    ? event.target.closest<HTMLAnchorElement>('a[href^="/usus/"], a[href^="/litterae/"]')
+                    : null
+                if (!link) return
+
+                const view = page.classList.contains('is-litterae-open') ? 'litterae' : 'usus'
+                const position = view === 'litterae'
+                    ? window.scrollY
+                    : activeUsusScroller()?.scrollLeft ?? 0
+                sessionStorage.setItem(storageKey(view), String(position))
+            }
 
             const createSceneSnapshot = (scene: HTMLElement) => {
                 const rect = scene.getBoundingClientRect()
@@ -224,6 +257,7 @@ function isPostOutdated(post: (typeof ususPosts)[number]) {
                 document.removeEventListener('wheel', handleWheel, { capture: true })
                 toggles.forEach((toggle) => toggle.removeEventListener('click', toggleLitterae))
                 window.removeEventListener('popstate', handlePopState)
+                document.removeEventListener('click', saveScrollPosition)
                 document.removeEventListener('astro:before-swap', dispose)
                 window.removeEventListener('pagehide', dispose)
             }
@@ -231,6 +265,7 @@ function isPostOutdated(post: (typeof ususPosts)[number]) {
             document.addEventListener('wheel', handleWheel, { capture: true, passive: false })
             toggles.forEach((toggle) => toggle.addEventListener('click', toggleLitterae))
             window.addEventListener('popstate', handlePopState)
+            document.addEventListener('click', saveScrollPosition)
             document.addEventListener('astro:before-swap', dispose)
             window.addEventListener('pagehide', dispose, { once: true })
         }
