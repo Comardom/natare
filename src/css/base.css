@@ -5,7 +5,34 @@ html, body {
     background: var(--theme-bg);
     color: var(--theme-color);
     font-size: 1.0625rem;
+    scrollbar-color: #aaa #fff;
+    scrollbar-width: thin;
     transition: background 0.3s ease, color 0.3s ease;
+}
+
+.dark {
+    scrollbar-color: #666 #000;
+}
+
+::-webkit-scrollbar {
+    inline-size: 0.75rem;
+    block-size: 0.75rem;
+}
+
+::-webkit-scrollbar-track {
+    background: #fff;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #aaa;
+}
+
+.dark ::-webkit-scrollbar-track {
+    background: #000;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+    background: #666;
 }
 
 a {
