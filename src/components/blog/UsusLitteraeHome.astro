@@ -44,7 +44,7 @@ function isPostOutdated(post: (typeof ususPosts)[number]) {
         <section class="usus-scene" aria-hidden={isLitteraeOpen}>
             <div class="usus-scroller">
                 <aside class="usus-intro">
-                    <h1>一片星瓦</h1>
+                    <h1 class="site-title"><span>一片</span><span>星瓦</span></h1>
                     <p>当我进入纯粹的黑暗时，天就是永远晴朗的。因为没有那些嘈杂的光色污染，即使是灰蒙蒙的天，也变得严谨可爱了起来。</p>
                     <button class="litterae-toggle" type="button" aria-label="切换文集" aria-expanded="false">
                         <img src="/go-black.svg" class="icon icon-go-black" alt="" />
@@ -74,15 +74,14 @@ function isPostOutdated(post: (typeof ususPosts)[number]) {
                     {litteraeCards.map(({ post, excerpt }) => (
                         <article class="post-card litterae-card" id={post.id}>
                             <time datetime={post.data.pubDate.toISOString()}>{post.data.pubDate.toLocaleDateString('zh-CN')}</time>
-                            <span class="post-author">作者：{post.data.author}</span>
-                            {post.data.title !== '-' && <h2><a href={`/litterae/${post.id}`}>{post.data.title}</a></h2>}
+                            <h2><a href={`/litterae/${post.id}`}>{post.data.title}</a></h2>
                             {excerpt && <a class="litterae-excerpt-link" href={`/litterae/${post.id}`}>{excerpt}</a>}
                         </article>
                     ))}
                 </div>
             </section>
             <aside class="litterae-sidebar">
-                <h1>一片星瓦</h1>
+                <h1 class="site-title"><span>一片</span><span>星瓦</span></h1>
                 <p>当我进入纯粹的黑暗时，天就是永远晴朗的。因为没有那些嘈杂的光色污染，即使是灰蒙蒙的天，也变得严谨可爱了起来。</p>
                 <button class="litterae-toggle" type="button" aria-label="切换技术博客" aria-expanded="true">
                     <img src="/go-black.svg" class="icon icon-go-black" alt="" />

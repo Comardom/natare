@@ -1,6 +1,7 @@
 ---
 import { getEntry, render } from 'astro:content'
 import ArticleGlass from '@/components/article/ArticleGlass.astro'
+import CodeCopy from '@/components/article/CodeCopy.astro'
 import NoticeBanner from '@/components/blog/NoticeBanner.astro'
 import ScrollablePageLayout from '@/layouts/ScrollablePageLayout.astro'
 import '/src/css/blog.css'
@@ -59,4 +60,5 @@ const mayBeOutdated = referenceDate < oneYearAgo
             backHref="/usus"
         />
     </main>
+    <CodeCopy />
 </ScrollablePageLayout>
