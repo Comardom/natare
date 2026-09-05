@@ -14,6 +14,15 @@ html, body {
     scrollbar-color: #666 #000;
 }
 
+.usus-scroller {
+    scrollbar-color: #aaa #fff;
+    scrollbar-width: thin;
+}
+
+html.dark .usus-scroller {
+    scrollbar-color: #666 #000;
+}
+
 ::-webkit-scrollbar {
     inline-size: 0.75rem;
     block-size: 0.75rem;
@@ -27,11 +36,15 @@ html, body {
     background: #aaa;
 }
 
-.dark ::-webkit-scrollbar-track {
+html.dark::-webkit-scrollbar-track,
+html.dark body::-webkit-scrollbar-track,
+html.dark .usus-scroller::-webkit-scrollbar-track {
     background: #000;
 }
 
-.dark ::-webkit-scrollbar-thumb {
+html.dark::-webkit-scrollbar-thumb,
+html.dark body::-webkit-scrollbar-thumb,
+html.dark .usus-scroller::-webkit-scrollbar-thumb {
     background: #666;
 }
 

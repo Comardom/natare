@@ -15,6 +15,22 @@ const ususPosts = (await getCollection('usus', ({ data }) => !data.draft))
 const litteraePosts = (await getCollection('litterae', ({ data }) => !data.draft))
     .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
 
+async function litteraeExcerpt(post: (typeof litteraePosts)[number]) {
+    if (post.data.excerpt) return post.data.excerpt
+
+    return (post.body ?? '')
+        .split('\n')
+        .map((line) => line.trim())
+        .filter((line) => line && !line.startsWith('#'))
+        .slice(0, 3)
+        .join('\n')
+}
+
+const litteraeCards = await Promise.all(litteraePosts.map(async (post) => ({
+    post,
+    excerpt: await litteraeExcerpt(post),
+})))
+
 function isPostOutdated(post: (typeof ususPosts)[number]) {
     const referenceDate = post.data.updatedDate ?? post.data.pubDate
     const oneYearAgo = new Date()
@@ -55,12 +71,12 @@ function isPostOutdated(post: (typeof ususPosts)[number]) {
         <section class="litterae-scene" aria-hidden={!isLitteraeOpen}>
             <section class="litterae-flow" aria-label="文集列表">
                 <div class="litterae-list">
-                    {litteraePosts.map((post) => (
+                    {litteraeCards.map(({ post, excerpt }) => (
                         <article class="post-card litterae-card">
                             <time datetime={post.data.pubDate.toISOString()}>{post.data.pubDate.toLocaleDateString('zh-CN')}</time>
                             <span class="post-author">作者：{post.data.author}</span>
-                            <h2><a href={`/litterae/${post.id}`}>{post.data.title}</a></h2>
-                            {post.data.description && <p>{post.data.description}</p>}
+                            {post.data.title !== '-' && <h2><a href={`/litterae/${post.id}`}>{post.data.title}</a></h2>}
+                            {excerpt && <a class="litterae-excerpt-link" href={`/litterae/${post.id}`}>{excerpt}</a>}
                         </article>
                     ))}
                 </div>

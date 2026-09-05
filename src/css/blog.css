@@ -96,6 +96,19 @@
     justify-self: center;
 }
 
+.litterae-excerpt-link {
+    display: block;
+    color: inherit;
+    line-height: 1.8;
+    opacity: 0.72;
+    text-decoration: none;
+    white-space: pre-line;
+}
+
+.litterae-excerpt-link:hover {
+    text-decoration: underline;
+}
+
 .usus-intro h1,
 .litterae-sidebar h1,
 .article-header h1 {
@@ -385,8 +398,15 @@
 }
 
 .article-reading-column {
+    display: grid;
     inline-size: 82.142857%;
+    min-block-size: 100svb;
     justify-self: center;
+    align-items: center;
+}
+
+.article-reading-content {
+    inline-size: 100%;
     padding-block: 3rem;
 }
 
@@ -570,7 +590,13 @@
     }
 
     .article-reading-column {
+        display: block;
         inline-size: auto;
+        min-block-size: 0;
+        padding-block: 0;
+    }
+
+    .article-reading-content {
         padding-block: 0;
     }
 

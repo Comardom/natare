@@ -25,28 +25,30 @@ const mayBeOutdated = referenceDate < oneYearAgo
 >
     <main class="article-page">
         <article class="article-reading-column">
-            <header class="article-header">
-                <h1>{post.data.title}</h1>
-            </header>
+            <div class="article-reading-content">
+                <header class="article-header">
+                    <h1>{post.data.title}</h1>
+                </header>
 
-            {post.data.aiGenerated && (
-                <NoticeBanner
-                    type="ai"
-                    title="AI 生成内容"
-                    message="本文由 AI 生成或参与生成，请读者自行核验文中信息。"
-                />
-            )}
+                {post.data.aiGenerated && (
+                    <NoticeBanner
+                        type="ai"
+                        title="AI 生成内容"
+                        message="本文由 AI 生成或参与生成，请读者自行核验文中信息。"
+                    />
+                )}
 
-            {mayBeOutdated && (
-                <NoticeBanner
-                    type="outdated"
-                    title="内容可能已过时"
-                    message="本文发布或更新已超过一年，相关信息可能已经发生变化，请结合当前资料进行核验。"
-                />
-            )}
+                {mayBeOutdated && (
+                    <NoticeBanner
+                        type="outdated"
+                        title="内容可能已过时"
+                        message="本文发布或更新已超过一年，相关信息可能已经发生变化，请结合当前资料进行核验。"
+                    />
+                )}
 
-            <div class="prose">
-                <Content />
+                <div class="prose">
+                    <Content />
+                </div>
             </div>
         </article>
         <ArticleGlass

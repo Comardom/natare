@@ -27,6 +27,7 @@ const litterae = defineCollection({
         title: z.string(),
         author: z.string(),
         description: z.string().optional(),
+        excerpt: z.string().optional(),
         pubDate: z.coerce.date(),
         draft: z.boolean().default(false),
     }),

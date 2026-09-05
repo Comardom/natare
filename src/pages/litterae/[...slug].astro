@@ -20,12 +20,14 @@ const description = post.data.description ?? post.data.title
 >
     <main class="article-page litterae-article-page">
         <article class="article-reading-column">
-            <header class="article-header">
-                <h1>{post.data.title}</h1>
-            </header>
+            <div class="article-reading-content">
+                <header class="article-header">
+                    <h1>{post.data.title}</h1>
+                </header>
 
-            <div class="prose">
-                <Content />
+                <div class="prose">
+                    <Content />
+                </div>
             </div>
         </article>
         <ArticleGlass author={post.data.author} pubDate={post.data.pubDate} backHref="/litterae" />
