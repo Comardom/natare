@@ -1,7 +1,11 @@
 ---
 import { getEntry, render } from 'astro:content'
+import ArticleBackToggle from '@/components/article/ArticleBackToggle.astro'
 import ArticleGlass from '@/components/article/ArticleGlass.astro'
+import ArticleMobileMeta from '@/components/article/ArticleMobileMeta.astro'
 import CodeCopy from '@/components/article/CodeCopy.astro'
+import ThemeToggle from '@/components/blog/ThemeToggle.astro'
+import Busuanzi from '@/components/site/Busuanzi.astro'
 import ScrollablePageLayout from '@/layouts/ScrollablePageLayout.astro'
 import '/src/css/blog.css'
 
@@ -24,14 +28,28 @@ const description = post.data.description ?? post.data.title
             <div class="article-reading-content">
                 <header class="article-header">
                     <h1>{post.data.title}</h1>
+                    <ArticleMobileMeta
+                        author={post.data.author}
+                        pubDate={post.data.pubDate}
+                    />
                 </header>
 
-                <div class="prose">
-                    <Content />
+                <div class="article-prose">
+                    <div class="prose">
+                        <Content />
+                    </div>
                 </div>
+
+                <footer class="article-footer">
+                    <Busuanzi scope="page" />
+                </footer>
             </div>
         </article>
         <ArticleGlass author={post.data.author} pubDate={post.data.pubDate} backHref="/litterae" />
     </main>
+    <div class="article-float-actions">
+        <ArticleBackToggle href="/litterae" />
+        <ThemeToggle />
+    </div>
     <CodeCopy />
 </ScrollablePageLayout>

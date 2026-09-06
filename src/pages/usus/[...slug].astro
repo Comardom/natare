@@ -1,8 +1,12 @@
 ---
 import { getEntry, render } from 'astro:content'
+import ArticleBackToggle from '@/components/article/ArticleBackToggle.astro'
 import ArticleGlass from '@/components/article/ArticleGlass.astro'
+import ArticleMobileMeta from '@/components/article/ArticleMobileMeta.astro'
 import CodeCopy from '@/components/article/CodeCopy.astro'
 import NoticeBanner from '@/components/blog/NoticeBanner.astro'
+import ThemeToggle from '@/components/blog/ThemeToggle.astro'
+import Busuanzi from '@/components/site/Busuanzi.astro'
 import ScrollablePageLayout from '@/layouts/ScrollablePageLayout.astro'
 import '/src/css/blog.css'
 
@@ -29,6 +33,12 @@ const mayBeOutdated = referenceDate < oneYearAgo
             <div class="article-reading-content">
                 <header class="article-header">
                     <h1>{post.data.title}</h1>
+                    <ArticleMobileMeta
+                        author={post.data.aiGenerated ? undefined : post.data.author}
+                        pubDate={post.data.pubDate}
+                        aiGenerated={post.data.aiGenerated}
+                        mayBeOutdated={mayBeOutdated}
+                    />
                 </header>
 
                 {post.data.aiGenerated && (
@@ -47,9 +57,15 @@ const mayBeOutdated = referenceDate < oneYearAgo
                     />
                 )}
 
-                <div class="prose">
-                    <Content />
+                <div class="article-prose">
+                    <div class="prose">
+                        <Content />
+                    </div>
                 </div>
+
+                <footer class="article-footer">
+                    <Busuanzi scope="page" />
+                </footer>
             </div>
         </article>
         <ArticleGlass
@@ -60,5 +76,9 @@ const mayBeOutdated = referenceDate < oneYearAgo
             backHref="/usus"
         />
     </main>
+    <div class="article-float-actions">
+        <ArticleBackToggle href="/usus" />
+        <ThemeToggle />
+    </div>
     <CodeCopy />
 </ScrollablePageLayout>

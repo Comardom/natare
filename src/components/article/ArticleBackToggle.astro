@@ -1,0 +1,12 @@
+---
+interface Props {
+    href: string
+}
+
+const { href } = Astro.props
+---
+
+<a class="article-back-toggle" href={href} aria-label="返回列表">
+    <img src="/exit-black.svg" class="icon icon-exit-black" alt="" />
+    <img src="/exit-white.svg" class="icon icon-exit-white" alt="" />
+</a>

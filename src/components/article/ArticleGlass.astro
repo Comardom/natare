@@ -1,6 +1,7 @@
 ---
 import ThemeToggle from '@/components/blog/ThemeToggle.astro'
 import Busuanzi from '@/components/site/Busuanzi.astro'
+import ArticleBackToggle from '@/components/article/ArticleBackToggle.astro'
 
 interface Props {
     author?: string
@@ -45,10 +46,7 @@ const { author, pubDate, aiGenerated = false, mayBeOutdated = false, backHref } 
             <Busuanzi scope="page" />
         </div>
         <div class="article-glass-actions">
-            <a class="article-back-toggle" href={backHref} aria-label="返回列表">
-                <img src="/exit-black.svg" class="icon icon-exit-black" alt="" />
-                <img src="/exit-white.svg" class="icon icon-exit-white" alt="" />
-            </a>
+            <ArticleBackToggle href={backHref} />
             <ThemeToggle />
         </div>
     </div>

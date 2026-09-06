@@ -484,32 +484,65 @@
 }
 
 .article-page {
-    display: grid;
-    grid-template-columns: minmax(0, 70%) minmax(0, 30%);
-    min-block-size: 100svb;
+    display: block;
+    min-block-size: 0;
+    padding: 1.5rem 1rem 0;
 }
 
 .article-reading-column {
-    display: grid;
-    inline-size: 82.142857%;
-    min-block-size: 100svb;
+    display: block;
+    inline-size: auto;
     min-inline-size: 0;
-    justify-self: center;
-    align-items: center;
+    max-inline-size: 100%;
+    min-block-size: 0;
+    padding-block: 0;
 }
 
 .article-reading-content {
     inline-size: 100%;
     min-inline-size: 0;
-    padding-block: 3rem;
+    max-inline-size: 100%;
+    padding-block: 0;
+    padding-block-end: calc(7rem + env(safe-area-inset-bottom));
 }
 
 .article-aside {
-    display: grid;
-    align-items: start;
-    justify-items: center;
-    min-block-size: 100svb;
+    display: none;
     min-inline-size: 0;
+}
+
+@media (min-width: 40.0625rem) {
+    .article-page {
+        display: grid;
+        grid-template-columns: minmax(0, 70%) minmax(0, 30%);
+        min-block-size: 100svb;
+        padding: 0;
+    }
+
+    .article-reading-column {
+        display: grid;
+        inline-size: 82.142857%;
+        min-block-size: 100svb;
+        min-inline-size: 0;
+        max-inline-size: none;
+        justify-self: center;
+        align-items: center;
+        padding-block: 0;
+    }
+
+    .article-reading-content {
+        inline-size: 100%;
+        min-inline-size: 0;
+        max-inline-size: none;
+        padding-block: 3rem;
+    }
+
+    .article-aside {
+        display: grid;
+        align-items: start;
+        justify-items: center;
+        min-block-size: 100svb;
+    }
 }
 
 .article-glass {
@@ -613,7 +646,13 @@
 }
 
 .article-header {
-    margin-block-end: 3rem;
+    margin-block-end: 1.5rem;
+}
+
+@media (min-width: 40.0625rem) {
+    .article-header {
+        margin-block-end: 3rem;
+    }
 }
 
 .back-link {
@@ -623,6 +662,7 @@
 
 .prose {
     min-inline-size: 0;
+    overflow-wrap: anywhere;
     font-size: 1.125rem;
     line-height: 1.95;
 }
@@ -664,6 +704,7 @@
     min-inline-size: 0;
     max-inline-size: 100%;
     overflow-x: auto;
+    overflow-wrap: normal;
     scrollbar-color: #aaa #fff;
     scrollbar-width: thin;
     border: 0.0625rem solid var(--theme-border-button);
@@ -671,6 +712,10 @@
     background: var(--theme-bg-button);
     font-size: 0.9375rem;
     line-height: 1.6;
+}
+
+.prose pre * {
+    overflow-wrap: normal;
 }
 
 .code-copy-button {
@@ -715,6 +760,22 @@
     block-size: auto;
 }
 
+.prose math {
+    overflow-wrap: normal;
+}
+
+.prose math[display='block'] {
+    display: block;
+    max-inline-size: 100%;
+    overflow-x: auto;
+}
+
+.article-byline,
+.article-footer,
+.article-float-actions {
+    display: none;
+}
+
 @media (max-width: 40rem) {
     .site-index-inner {
         justify-content: center;
@@ -750,35 +811,73 @@
         padding: 0;
     }
 
-    .article-page {
-        display: block;
-        min-block-size: 0;
-        padding: 1.5rem 0.75rem 3rem;
+    .article-byline {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: 0.35rem 0.6rem;
+        margin-block-start: 0.875rem;
+        font-size: 0.9375rem;
+        opacity: 0.65;
     }
 
-    .article-reading-column {
-        display: block;
-        inline-size: auto;
-        min-block-size: 0;
-        padding-block: 0;
+    .article-byline .ai-tag,
+    .article-byline .outdated-tag {
+        margin-inline-start: 0;
     }
 
-    .article-reading-content {
-        padding-block: 0;
+    .article-prose {
+        min-inline-size: 0;
+        max-inline-size: 100%;
+        border-block-start: 0.0625rem solid var(--theme-border-button);
+        margin-block-start: 1.25rem;
+        padding-block-start: 1.75rem;
     }
 
-    .article-aside {
-        display: block;
-        min-block-size: 0;
-        margin-block-start: 2rem;
+    .article-prose .prose {
+        min-inline-size: 0;
+        max-inline-size: 100%;
     }
 
-    .article-glass {
-        position: static;
+    .article-prose .prose pre {
         inline-size: 100%;
-        block-size: auto;
-        min-block-size: 0;
-        gap: 2rem;
+        max-inline-size: 100%;
+    }
+
+    .article-prose .prose table {
+        display: block;
+        max-inline-size: 100%;
+        overflow-x: auto;
+    }
+
+    .article-footer {
+        display: flex;
+        flex-direction: column;
+        border-block-start: 0.0625rem solid var(--theme-border-button);
+        margin-block-start: 2.5rem;
+        padding-block-start: 1.5rem;
+    }
+
+    .article-float-actions {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem;
+        position: fixed;
+        inset-block-end: calc(1.5rem + env(safe-area-inset-bottom));
+        inset-inline-start: calc(1rem + env(safe-area-inset-left));
+        z-index: 200;
+    }
+
+    .article-float-actions .theme-toggle,
+    .article-float-actions .article-back-toggle {
+        position: static;
+        inset: auto;
+        margin: 0;
+    }
+
+    .notice-banner {
+        margin-block: 1rem 1.25rem;
     }
 
     .usus-scroller {
