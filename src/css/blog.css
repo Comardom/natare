@@ -5,6 +5,7 @@
 }
 
 .site-index {
+    position: relative;
     block-size: 100dvb;
     inline-size: 100%;
     overflow: hidden;
@@ -12,12 +13,13 @@
 }
 
 .site-index-inner {
+    position: absolute;
+    inset: 0;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-evenly;
-    block-size: 100%;
     padding: 30dvb 1rem;
     color: var(--theme-color);
     text-align: center;
@@ -887,12 +889,28 @@
         overflow: visible;
     }
 
+    .usus-flow,
+    .litterae-flow {
+        inline-size: 100%;
+        max-inline-size: 100%;
+        margin-inline: 0;
+        padding-inline: 0.75rem;
+        box-sizing: border-box;
+    }
+
+    .usus-list,
+    .litterae-list {
+        inline-size: 100%;
+        max-inline-size: 100%;
+    }
+
     .content-page.is-litterae-open .usus-scene {
         display: none;
     }
 
     .content-page.is-litterae-open .litterae-scene {
-        display: block;
+        display: flex;
+        flex-direction: column;
     }
 
     .usus-intro,
@@ -933,7 +951,44 @@
 
     .litterae-sidebar {
         position: static;
-        text-align: end;
+        text-align: start;
+    }
+
+    .litterae-scene .litterae-flow {
+        order: 1;
+    }
+
+    .litterae-scene .litterae-sidebar {
+        order: 0;
+    }
+
+    .usus-scene .usus-intro,
+    .litterae-scene .litterae-sidebar {
+        position: sticky;
+        inset-block-start: 0;
+        z-index: 30;
+        box-sizing: border-box;
+        inline-size: 100%;
+        max-inline-size: 100%;
+        block-size: auto;
+        margin-block-end: 0;
+        padding-block-end: 0.875rem;
+        background: var(--theme-bg);
+        border-block-end: 0.0625rem solid var(--theme-border-button);
+    }
+
+    .content-page ~ .theme-toggle,
+    .content-page.is-litterae-open ~ .theme-toggle {
+        inset-inline-start: calc(1rem + env(safe-area-inset-left));
+        inset-inline-end: auto;
+        inset-block-end: calc(1.5rem + env(safe-area-inset-bottom));
+        margin: 0;
+        z-index: 200;
+    }
+
+    .usus-intro .litterae-toggle,
+    .litterae-sidebar .litterae-toggle {
+        margin-block-start: 1rem;
     }
 }
 
