@@ -44,7 +44,7 @@ function isPostOutdated(post: (typeof ususPosts)[number]) {
         <section class="usus-scene" aria-hidden={isLitteraeOpen}>
             <div class="usus-scroller">
                 <aside class="usus-intro">
-                    <h1 class="site-title"><span>一片</span><span>星瓦</span></h1>
+                    <h1 class="site-title"><a href="/"><span>一片</span><span>星瓦</span></a></h1>
                     <p>当我进入纯粹的黑暗时，天就是永远晴朗的。因为没有那些嘈杂的光色污染，即使是灰蒙蒙的天，也变得严谨可爱了起来。</p>
                     <button class="litterae-toggle" type="button" aria-label="切换文集" aria-expanded="false">
                         <img src="/go-black.svg" class="icon icon-go-black" alt="" />
@@ -56,7 +56,7 @@ function isPostOutdated(post: (typeof ususPosts)[number]) {
                         {ususPosts.length ? ususPosts.map((post) => (
                             <article class="post-card" id={post.id}>
                                 <time datetime={post.data.pubDate.toISOString()}>{post.data.pubDate.toLocaleDateString('zh-CN')}</time>
-                                <span class="post-author">作者：{post.data.author}</span>
+                                {!post.data.aiGenerated && <span class="post-author">作者：{post.data.author}</span>}
                                 {post.data.aiGenerated && <span class="ai-tag">AI 生成</span>}
                                 {isPostOutdated(post) && <span class="outdated-tag">可能过时</span>}
                                 <h2><a href={`/usus/${post.id}`}>{post.data.title}</a></h2>
@@ -81,7 +81,7 @@ function isPostOutdated(post: (typeof ususPosts)[number]) {
                 </div>
             </section>
             <aside class="litterae-sidebar">
-                <h1 class="site-title"><span>一片</span><span>星瓦</span></h1>
+                <h1 class="site-title"><a href="/"><span>一片</span><span>星瓦</span></a></h1>
                 <p>当我进入纯粹的黑暗时，天就是永远晴朗的。因为没有那些嘈杂的光色污染，即使是灰蒙蒙的天，也变得严谨可爱了起来。</p>
                 <button class="litterae-toggle" type="button" aria-label="切换技术博客" aria-expanded="true">
                     <img src="/go-black.svg" class="icon icon-go-black" alt="" />

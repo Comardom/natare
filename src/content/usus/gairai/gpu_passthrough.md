@@ -2,7 +2,7 @@
 title: Linux下的gpu直通到虚拟机
 author: avbest_Qua
 pubDate: 2026-07-09
-description: ''
+description: 在 Linux 主机上通过 VFIO 将独立 GPU 直通给 KVM/QEMU 虚拟机的完整记录，包含 IOMMU、显卡驱动隔离、VBIOS、libvirt 与虚拟机配置。
 draft: false
 ---
 
@@ -546,4 +546,3 @@ sudo modprobe nvidia_drm
 哦还有手柄的问题，这个有点无解，如果你用的是usb接收器，手柄休眠之后再连接，有一瞬间设备id会变，但是这样qemu就不会再通这个设备进去了. looking glass也不能正常用evdev的方案，不知道为什么. 不过有线不会受影响，因为有线状态下手柄不会休眠，但是需要你额外装xpad的驱动才行.
 
 不过其实也没那么麻烦，只是每次重新连接的时候，都需要在virt里面重配一次usb直通罢了，很快的.
-

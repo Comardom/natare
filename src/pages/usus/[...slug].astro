@@ -53,7 +53,7 @@ const mayBeOutdated = referenceDate < oneYearAgo
             </div>
         </article>
         <ArticleGlass
-            author={post.data.author}
+            author={post.data.aiGenerated ? undefined : post.data.author}
             pubDate={post.data.pubDate}
             aiGenerated={post.data.aiGenerated}
             mayBeOutdated={mayBeOutdated}

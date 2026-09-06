@@ -4,6 +4,77 @@
     overflow: hidden;
 }
 
+.site-index {
+    block-size: 100dvb;
+    inline-size: 100%;
+    overflow: hidden;
+    background: var(--theme-bg);
+}
+
+.site-index-inner {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    block-size: 100%;
+    padding: 30dvb 1rem;
+    color: var(--theme-color);
+    text-align: center;
+}
+
+.site-index-links {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+}
+
+.site-index-links a {
+    font-size: 1.3625rem;
+}
+
+.site-index-spacer {
+    block-size: 1.1125rem;
+}
+
+.site-index-copy,
+.site-index-records {
+    margin: 0;
+    font-family: Georgia, 'Times New Roman', serif;
+}
+
+.site-index-copy {
+    font-size: 1.15rem;
+}
+
+.site-index-records {
+    font-size: 0.9rem;
+    margin-block-start: 0.75rem;
+    opacity: 0.85;
+}
+
+.site-index-records a {
+    color: inherit;
+}
+
+.busuanzi {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.25rem 0.75rem;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 0.75rem;
+    opacity: 0.625;
+}
+
+.article-glass .busuanzi {
+    justify-content: center;
+    font-family: inherit;
+    text-align: center;
+}
+
 .usus-scene {
     block-size: 100%;
     inline-size: 100%;
@@ -124,6 +195,11 @@
 
 .site-title span {
     display: inline;
+}
+
+.site-title a {
+    color: inherit;
+    text-decoration: none;
 }
 
 @container (max-width: 18rem) {
@@ -463,8 +539,18 @@
 
 .article-glass-meta {
     display: grid;
-    gap: 1.25rem;
+    gap: 0.75rem;
+    justify-items: center;
     margin: 0;
+    text-align: center;
+}
+
+.article-glass-info {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+    margin-block: auto;
 }
 
 .article-glass-meta div {
@@ -630,6 +716,32 @@
 }
 
 @media (max-width: 40rem) {
+    .site-index-inner {
+        justify-content: center;
+        padding: 8svb 12svi;
+        writing-mode: vertical-rl;
+        text-orientation: mixed;
+    }
+
+    .site-index-links {
+        flex: 0 1 auto;
+        justify-content: center;
+        gap: 1.5rem;
+    }
+
+    .site-index-links a,
+    .site-index-copy,
+    .site-index-records,
+    .site-index .busuanzi {
+        font-size: 1rem;
+        margin: 0;
+        white-space: nowrap;
+    }
+
+    .site-index .busuanzi {
+        flex-direction: column;
+    }
+
     .content-page {
         block-size: auto;
         inline-size: auto;

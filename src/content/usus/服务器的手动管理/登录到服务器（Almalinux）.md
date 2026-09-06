@@ -1,7 +1,7 @@
 ---
 title: 登录到服务器-Almalinux
 author: Comardom
-description: 记录服务器的SSH基础流程。
+description: 记录 AlmaLinux 服务器的 SSH 登录、安全组与端口配置、用户权限划分和基础环境准备流程。
 pubDate: 2026-08-08
 draft: false
 ---

@@ -1,7 +1,7 @@
 ---
 title: Ansible入门
 author: Comardom
-description: Ansible的基础操作。
+description: 从 SSH 连接、密钥与 sudo 账户准备开始，介绍 Ansible 控制节点、Inventory、Playbook 和基础服务器管理流程。
 pubDate: 2026-04-01
 draft: false
 ---

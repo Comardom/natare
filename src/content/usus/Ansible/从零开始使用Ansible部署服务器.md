@@ -1,7 +1,7 @@
 ---
 title: 从零开始使用Ansible部署服务器
 author: Comardom
-description: 从实际需求出发，为部署服务，从零开始使用Ansible管理服务器。
+description: 从新服务器初始化、SSH 与账户配置开始，逐步使用 Ansible 完成系统环境、服务部署和配置管理。
 pubDate: 2026-07-24
 draft: false
 ---

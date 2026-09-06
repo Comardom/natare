@@ -1,3 +1,30 @@
 ---
-return Astro.redirect('/usus', 301)
+import Busuanzi from '@/components/site/Busuanzi.astro'
+import ScrollablePageLayout from '@/layouts/ScrollablePageLayout.astro'
+import '/src/css/blog.css'
+
+const currentYear = new Date().getFullYear()
 ---
+
+<ScrollablePageLayout title="一片星瓦 | Comardom">
+    <main class="site-index">
+        <div class="site-index-inner">
+            <nav class="site-index-links" aria-label="站点入口">
+                <a href="/usus">技术博客</a>
+                <span aria-hidden="true">·</span>
+                <a href="/litterae">诗歌文章</a>
+                <span aria-hidden="true">·</span>
+                <a href="https://taskapsule.xyz">日程应用</a>
+            </nav>
+            <span class="site-index-spacer" aria-hidden="true" />
+            <p class="site-index-copy">© 2025-{currentYear} <a href="https://github.com/Comardom" target="_blank" rel="noopener noreferrer">笃聿Comardom</a>所有</p>
+            <p class="site-index-records">
+                <a href="https://beian.miit.gov.cn" target="_blank" rel="noopener noreferrer">辽ICP备2025060502号-1</a>
+                <span aria-hidden="true"> · </span>
+                <a href="https://www.beian.gov.cn/portal/registerSystemInfo?recordcode=21021702000756" target="_blank" rel="noopener noreferrer">辽公网安备21021702000756号</a>
+            </p>
+            <span class="site-index-spacer" aria-hidden="true" />
+            <Busuanzi scope="site" />
+        </div>
+    </main>
+</ScrollablePageLayout>

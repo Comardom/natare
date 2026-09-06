@@ -1,7 +1,7 @@
 ---
-title: Ansible的重启容器化执行
+title: Ansible的容器化执行
 author: Comardom
-description: 基于Podman的Ansible操作。
+description: 使用 Podman 构建和运行 Ansible Execution Environment，记录 ansible-navigator、ansible-builder 与自定义依赖镜像的配置流程。
 pubDate: 2026-04-01
 draft: false
 ---

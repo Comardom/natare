@@ -1,7 +1,7 @@
 ---
 title: ICP与公安备案
 author: Comardom
-description: ICP与公安备案可能踩的坑。
+description: 整理中国大陆服务器建站涉及的 ICP 与公安备案条件、域名限制、材料准备和常见流程问题。
 pubDate: 2026-04-01
 draft: false
 ---

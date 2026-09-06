@@ -1,0 +1,32 @@
+---
+interface Props {
+    scope: 'site' | 'page'
+}
+
+const { scope } = Astro.props
+---
+
+{scope === 'site' ? (
+    <div class="busuanzi" aria-label="站点访问统计">
+        <span>今日总访客数 <b id="busuanzi_today_uv">加载中...</b> 人</span>
+        <span>本站总访问量 <b id="busuanzi_site_pv">加载中...</b> 次</span>
+        <span>本站总访客数 <b id="busuanzi_site_uv">加载中...</b> 人</span>
+    </div>
+) : (
+    <div class="busuanzi" aria-label="本页访问统计">
+        <span>本页总阅读量 <b id="busuanzi_page_pv">加载中...</b> 次</span>
+        <span>本页总访客数 <b id="busuanzi_page_uv">加载中...</b> 人</span>
+    </div>
+)}
+
+<script>
+    const scriptId = 'busuanzi-script'
+
+    if (!document.getElementById(scriptId)) {
+        const script = document.createElement('script')
+        script.id = scriptId
+        script.src = 'https://cdn.busuanzi.cc/busuanzi/3.6.9/busuanzi.min.js'
+        script.defer = true
+        document.body.append(script)
+    }
+</script>
