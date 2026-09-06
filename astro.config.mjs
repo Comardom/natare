@@ -1,7 +1,6 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import node from '@astrojs/node';
-import sitemap from '@astrojs/sitemap'
 
 // https://astro.build/config
 export default defineConfig({
@@ -21,11 +20,6 @@ export default defineConfig({
     //adapter指的是使用SSR，node()指的是生成node代码
     // standalone模式指的是用Node.js内置的http模块，不需要Express或其他框架，entry.mjs 启动时自动监听端口
     adapter: node({ mode: 'standalone' }),
-    integrations: [
-        sitemap({
-            lastmod: new Date(),
-        })
-    ],
     //设置vite行为
     vite: {
         plugins: [
