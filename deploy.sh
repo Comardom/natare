@@ -11,7 +11,6 @@ PACKAGE_JSON="$DEPLOY_PACKAGES/comardom.top.package.json"
 
 echo "==> 1/5 构建"
 cd "$PROJECT_DIR"
-# pnpm font:subset:studio
 pnpm build
 
 echo "==> 2/5 备份旧包"
@@ -25,9 +24,12 @@ tar -czf "$TARBALL" -C "$PROJECT_DIR/dist" client server
 echo "==> 4/5 复制 package.json"
 cp "$PROJECT_DIR/package.json" "$PACKAGE_JSON"
 
+echo "==> 复制 workspace 配置"
+cp "$PROJECT_DIR/pnpm-workspace.yaml" "$DEPLOY_PACKAGES/comardom.top.pnpm-workspace.yaml"
+
 echo "==> 校验包内容"
 contents="$(tar -tzf "$TARBALL")"
-for f in "server/entry.mjs" "client/_astro" "client/studio-history"; do
+for f in "server/entry.mjs" "client/_astro" "client/sitemap.xml"; do
     if ! grep -q "^$f" <<<"$contents"; then
         echo "错误：包内缺少 $f" >&2
         exit 1
